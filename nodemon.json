@@ -1,0 +1,7 @@
+{
+    "$schema": "https://json.schemastore.org/nodemon",
+    "execMap": {
+        "ts": "node --inspect -r ts-node/register"
+    },
+    "ignore": ["node_modules/*"]
+}

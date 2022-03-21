@@ -1,0 +1,22 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+      {
+        "name": "Debug Assbook server",
+        "program": "${workspaceFolder}/src/app.ts",
+        "runtimeArgs": [
+          "--inspect",
+          "-r",
+          "ts-node/register"
+        ],
+        "autoAttachChildProcesses": true,
+        "restart": true,
+        "request": "launch",
+        "sourceMaps": true,
+        "skipFiles": [
+          "<node_internals>/**"
+        ],
+        "type": "pwa-node"
+      },
+    ]
+  }
