@@ -19,10 +19,10 @@ export default class UserController {
     if (!u) return new UserError("este usuario no existe puta");
     return new UserSuccessfull(u);
   }
-  static async deleteUser(username: string): Promise<UserState> {
-    if (!username) return new UserError("aqui falta el campo 'username' puta");
+  static async deleteUser(userid: number): Promise<UserState> {
+    if (!userid) return new UserError("aqui falta el campo 'userid' puta");
     const u = await user.findUnique({
-      where: { username: username },
+      where: { id: userid },
       include: { profile: true, posts: true },
     });
     if (!u) return new UserError("este usuario no existe puta");
@@ -31,7 +31,7 @@ export default class UserController {
     /* Delete Posts */
     await post.deleteMany({ where: { authorId: u.id } });
     /* Delete User */
-    await user.delete({ where: { username: username } });
+    await user.delete({ where: { id: userid } });
     return new UserSuccessfull(u);
   }
   static async createUser(data: {

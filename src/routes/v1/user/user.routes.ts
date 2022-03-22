@@ -24,8 +24,7 @@ router.get("/", async (req: Request, res: Response) => {
 });
 
 router.delete("/delete", async (req: Request, res: Response) => {
-  const { username } = req.body;
-  const a: UserState = await UserController.deleteUser(username);
+  const a: UserState = await UserController.deleteUser(req.session.userid!);
   if (a instanceof UserError) return res.status(400).json({ error: a.error });
   if (a instanceof UserSuccessfull) {
     req.session.destroy(() => {});
