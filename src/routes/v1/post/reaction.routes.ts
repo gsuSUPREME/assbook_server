@@ -14,7 +14,7 @@ router.post("/", async (req: Request, res: Response) => {
   const { postid, reactionType } = req.body;
   const response: ReactionState = await ReactionController.addReaction(
     userid!,
-    postid,
+    parseInt(postid),
     reactionType
   );
   if (response instanceof ReactionError)
@@ -28,7 +28,7 @@ router.patch("/", async (req: Request, res: Response) => {
   const { userid } = req.session;
   const { reactionid, reactionType } = req.body;
   const response: ReactionState = await ReactionController.UpdateReaction(
-    reactionid,
+    parseInt(reactionid),
     userid!,
     reactionType
   );
@@ -43,7 +43,7 @@ router.delete("/", async (req: Request, res: Response) => {
   const { userid } = req.session;
   const { reactionid } = req.body;
   const response: ReactionState = await ReactionController.removeReaction(
-    reactionid,
+    parseInt(reactionid),
     userid!
   );
   if (response instanceof ReactionError)

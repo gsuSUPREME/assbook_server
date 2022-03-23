@@ -5,6 +5,7 @@ describe("Post routes", () => {
   let post: any;
   let reaction: any;
   var Cookies: string;
+  var Cookies2: string;
   beforeAll(async () => {
     const a = await supertest.agent(app).post("/apiv1/logIn").send({
       username: "test",
@@ -28,9 +29,24 @@ describe("Post routes", () => {
     expect(result.statusCode).toBe(201);
   });
 
-  test("Debe reaccionar", async () => {
+  test("Debe no dejar reaccionar a su propio post", async () => {
     const a = supertest(app).post("/apiv1/post/reaction/");
     a.cookies = Cookies;
+    const result = await a.send({
+      postid: post.id,
+      reactionType: "like",
+    });
+    expect(result.statusCode).toBe(400);
+  });
+
+  test("Debe dejar reaccionar desde otro usuario", async () => {
+    const a1 = await supertest.agent(app).post("/apiv1/logIn").send({
+      username: "test2",
+      password: "test2",
+    });
+    Cookies2 = a1.headers["set-cookie"].pop().split(";")[0];
+    const a = supertest(app).post("/apiv1/post/reaction/");
+    a.cookies = Cookies2;
     const result = await a.send({
       postid: post.id,
       reactionType: "like",
@@ -57,7 +73,7 @@ describe("Post routes", () => {
   });
   test("Debe actualizar la reacción", async () => {
     const a = supertest(app).patch("/apiv1/post/reaction/");
-    a.cookies = Cookies;
+    a.cookies = Cookies2;
     const result = await a.send({
       reactionid: reaction.id,
       reactionType: "heart",
