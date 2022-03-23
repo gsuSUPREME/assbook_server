@@ -1,11 +1,11 @@
 {
   "name": "assbook",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "dist/app.js",
   "scripts": {
     "build": "tsc",
     "dev": "nodemon src/app.ts",
-    "start": "npm i && npm run build && NODE_ENV=production node dist/app.js",
+    "start": "node dist/app.js",
     "test": "jest"
   },
   "keywords": [],
