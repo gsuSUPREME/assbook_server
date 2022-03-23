@@ -105,6 +105,6 @@
     "transpileOnly": true,
     "transpiler": "ts-node/transpilers/swc"
   },
-  "include": ["src/**/*"],
+  "include": ["src/**/*", "prisma"],
   "exclude": ["node_modules/"]
 }

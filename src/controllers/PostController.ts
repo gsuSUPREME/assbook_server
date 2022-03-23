@@ -1,4 +1,4 @@
-import { post } from "../prisma/prisma";
+import { post } from "../helpers/prisma";
 import {
   PostError,
   PostState,
