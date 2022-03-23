@@ -3,6 +3,7 @@ import app from "../../../index";
 
 describe("Post routes", () => {
   let post: any;
+  let reaction: any;
   var Cookies: string;
   beforeAll(async () => {
     const a = await supertest.agent(app).post("/apiv1/logIn").send({
@@ -26,6 +27,18 @@ describe("Post routes", () => {
     post = result.body.post;
     expect(result.statusCode).toBe(201);
   });
+
+  test("Debe reaccionar", async () => {
+    const a = supertest(app).post("/apiv1/post/reaction/");
+    a.cookies = Cookies;
+    const result = await a.send({
+      postid: post.id,
+      reactionType: "like",
+    });
+    reaction = result.body.reaction;
+    expect(result.statusCode).toBe(201);
+  });
+
   test("Debe cargar los posts", async () => {
     const a = supertest(app).get("/apiv1/post/");
     a.cookies = Cookies;
@@ -39,6 +52,15 @@ describe("Post routes", () => {
       title: "b",
       content: "bcbcbcbc",
       postid: post.id,
+    });
+    expect(result.statusCode).toBe(200);
+  });
+  test("Debe actualizar la reacción", async () => {
+    const a = supertest(app).patch("/apiv1/post/reaction/");
+    a.cookies = Cookies;
+    const result = await a.send({
+      reactionid: reaction.id,
+      reactionType: "heart",
     });
     expect(result.statusCode).toBe(200);
   });

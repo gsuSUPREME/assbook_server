@@ -14,47 +14,58 @@ model Session {
   id        String   @id
   sid       String   @unique
   data      String
-  expiresAt   DateTime
+  expiresAt DateTime
 }
 
 model User {
-  id       Int      @id @default(autoincrement())
-  email    String?  @unique
+  id       Int        @id @default(autoincrement())
+  email    String?    @unique
   name     String
-  username String   @unique
-  phone    String?  @unique
+  username String     @unique
+  phone    String?    @unique
   password String
   posts    Post[]
-  profile  Profile? @relation(name: "profile")
-  sender   Friend?  @relation(name: "sender")
+  profile  Profile?   @relation(name: "profile")
+  sender   Friend?    @relation(name: "sender")
   friends  Friend[]
+  Reaction Reaction[]
 }
 
 model Profile {
   id     Int     @id @default(autoincrement())
   bio    String?
-  user   User    @relation(name: "profile", fields: [userId], references: [id])
+  user   User    @relation(name: "profile", fields: [userId], references: [id], onDelete: Cascade)
   userId Int     @unique
 }
 
 model Friend {
   id         Int       @id @default(autoincrement())
-  sender     User      @relation("sender", fields: [senderId], references: [id])
+  sender     User      @relation("sender", fields: [senderId], references: [id], onDelete: Cascade)
   senderId   Int       @unique
   Accepted   Boolean
   AcceptedAt DateTime?
   SendedAt   DateTime  @default(now())
-  User       User?     @relation(fields: [userId], references: [id])
+  User       User?     @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId     Int?
 }
 
 model Post {
-  id        Int      @id @default(autoincrement())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  title     String   @db.VarChar(255)
+  id        Int        @id @default(autoincrement())
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  title     String     @db.VarChar(255)
   content   String?
-  published Boolean  @default(false)
-  author    User     @relation(fields: [authorId], references: [id])
+  published Boolean    @default(false)
+  reactions Reaction[]
+  author    User       @relation(fields: [authorId], references: [id], onDelete: Cascade)
   authorId  Int
+}
+
+model Reaction {
+  id     Int    @id @default(autoincrement())
+  post   Post   @relation(fields: [postid], references: [id], onDelete: Cascade)
+  postid Int
+  user   User   @relation(fields: [userid], references: [id], onDelete: Cascade)
+  userid Int
+  type   String
 }

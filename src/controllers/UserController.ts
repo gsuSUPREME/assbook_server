@@ -23,14 +23,8 @@ export default class UserController {
     if (!userid) return new UserError("aqui falta el campo 'userid' puta");
     const u = await user.findUnique({
       where: { id: userid },
-      include: { profile: true, posts: true },
     });
     if (!u) return new UserError("este usuario no existe puta");
-    /* Delete Profile */
-    await profile.delete({ where: { id: u.profile?.id } });
-    /* Delete Posts */
-    await post.deleteMany({ where: { authorId: u.id } });
-    /* Delete User */
     await user.delete({ where: { id: userid } });
     return new UserSuccessfull(u);
   }

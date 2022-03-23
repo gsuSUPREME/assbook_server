@@ -3,17 +3,26 @@ import type { Request, Response } from "express";
 import PostController from "../../../controllers/PostController";
 import { PostError, PostSuccessfull } from "../../../helpers/models/PostState";
 import AuthHelper from "../../../helpers/auth";
+import ReactionRouter from "./reaction.routes";
 
 const router = Router();
 
 router.use(AuthHelper);
 
+router.use("/reaction", ReactionRouter);
+
 router.get("/", async (req: Request, res: Response) => {
-  const result = await PostController.fetchPosts(req.session.userid!);
+  const { postid } = req.body;
+  var result;
+  if (!postid) {
+    result = await PostController.fetchPosts(req.session.userid!);
+  } else {
+    result = await PostController.getPost(postid);
+  }
   if (result instanceof PostError)
     return res.status(400).json({ error: result.error });
   if (result instanceof PostSuccessfull)
-    return res.status(200).json({ posts: result.posts });
+    return res.status(200).json({ posts: result.post });
   else
     return res.status(500).json({
       error:
