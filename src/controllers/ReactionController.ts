@@ -1,4 +1,4 @@
-import { post, reaction } from "../../prisma/prisma";
+import { post, reaction } from "../prisma/prisma";
 import {
   ReactionError,
   ReactionState,

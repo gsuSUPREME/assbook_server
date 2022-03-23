@@ -1,4 +1,4 @@
-import { post, profile, user } from "../../prisma/prisma";
+import { post, profile, user } from "../prisma/prisma";
 import {
   UserError,
   UserState,

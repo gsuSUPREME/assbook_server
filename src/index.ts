@@ -3,7 +3,7 @@ import ApiV1Routes from "./routes/v1/index.routes";
 import sessions from "express-session";
 import cookieParser from "cookie-parser";
 import { PrismaSessionStore } from "@quixo3/prisma-session-store";
-import { prisma } from "../prisma/prisma";
+import { prisma } from "./prisma/prisma";
 
 const app = express();
 
