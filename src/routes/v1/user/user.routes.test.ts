@@ -1,11 +1,15 @@
 import "jest";
 import supertest from "supertest";
 import request from "supertest";
+import { prisma } from "../../../helpers/prisma";
 import app from "../../../index";
 
 describe("Users routes", () => {
   jest.setTimeout(15000);
   var Cookies: string;
+  afterAll(async () => {
+    await prisma.$disconnect();
+  });
   test("Debe crear un nuevo usuario", async () => {
     const res = await supertest(app).post("/apiv1/signIn").send({
       name: "s",
