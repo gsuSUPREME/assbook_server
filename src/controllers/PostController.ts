@@ -6,10 +6,22 @@ import {
 } from "../helpers/models/PostState";
 
 export default class PostController {
+  static async getPost(postid: number): Promise<PostState> {
+    if (!postid) return new PostError("falta 'postid' anormal");
+    const a = await post.findUnique({ where: { id: postid } });
+    if (!a) return new PostError("esta publicacion ya no existe");
+    return new PostSuccessfull(a);
+  }
   static async fetchPosts(userid: number): Promise<PostState> {
     if (!userid) return new PostError("falta 'userid' estupido");
-    const posts = await post.findMany({ where: { authorId: userid } });
-    return new PostSuccessfull(posts[0], posts);
+    const posts = await post.findMany({
+      where: { authorId: userid },
+      include: {
+        reactions: true,
+        author: true,
+      },
+    });
+    return new PostSuccessfull(posts);
   }
   static async createPost({
     userid,
@@ -27,7 +39,7 @@ export default class PostController {
         authorId: userid,
       },
     });
-    return new PostSuccessfull(newPost, undefined);
+    return new PostSuccessfull(newPost);
   }
   static async deletePost(postid: number): Promise<PostState> {
     if (!postid) return new PostError("falta el campo 'postid' anormal");
@@ -36,7 +48,7 @@ export default class PostController {
         id: postid,
       },
     });
-    return new PostSuccessfull(deletedPost, undefined);
+    return new PostSuccessfull(deletedPost);
   }
   static async updatePost(
     postid: number,
@@ -52,19 +64,19 @@ export default class PostController {
         where: { id: postid },
         data: { title: content.title },
       });
-      return new PostSuccessfull(ActualizedPost, undefined);
+      return new PostSuccessfull(ActualizedPost);
     }
     if (!content.title) {
       const ActualizedPost = await post.update({
         where: { id: postid },
         data: { content: content.content },
       });
-      return new PostSuccessfull(ActualizedPost, undefined);
+      return new PostSuccessfull(ActualizedPost);
     }
     const ActualizedPost = await post.update({
       where: { id: postid },
       data: { title: content.title, content: content.content },
     });
-    return new PostSuccessfull(ActualizedPost, undefined);
+    return new PostSuccessfull(ActualizedPost);
   }
 }

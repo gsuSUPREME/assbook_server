@@ -11,11 +11,9 @@ export class PostError extends PostState {
 }
 
 export class PostSuccessfull extends PostState {
-  post: Post;
-  posts: Array<Post> | undefined | null;
-  constructor(post: Post, posts: Array<Post> | undefined | null) {
+  post: Post | Array<Post>;
+  constructor(post: Post | Array<Post>) {
     super();
     this.post = post;
-    this.posts = posts;
   }
 }
