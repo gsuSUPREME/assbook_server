@@ -4,7 +4,7 @@ module.exports = {
   coverageProvider: "v8",
   preset: 'ts-jest',
   testEnvironment: 'node',
-  testPathIgnorePatterns: ["dist/"],
-  watchPathIgnorePatterns: ["dist/"],
-  coveragePathIgnorePatterns: ["dist/"]
+  testPathIgnorePatterns: ["dist/", "node_modules/", "__tests__/", "__mocks__/"],
+  watchPathIgnorePatterns: ["dist/", "node_modules/", "__tests__/", "__mocks__/"],
+  coveragePathIgnorePatterns: ["dist/", "node_modules/", "__tests__/", "__mocks__/"],
 };

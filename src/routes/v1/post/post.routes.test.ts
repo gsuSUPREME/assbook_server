@@ -19,6 +19,8 @@ describe("Post routes", () => {
     const a = supertest(app).delete("/apiv1/logOut");
     a.cookies = Cookies;
     await a.send();
+    a.cookies = Cookies2
+    await a.send()
     await prisma.$disconnect();
     await sessionStore.shutdown();
   });
