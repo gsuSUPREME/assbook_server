@@ -12,6 +12,7 @@ on:
 env: 
   TOKEN_SECRET: "aaaa"
   DATABASE_URL: "postgres://xd_eji0_user:kXwgjTA8j3wqVwL9qe63akdFHiUuNrRw@oregon-postgres.render.com/xd_eji0"
+  CI: true
 
 jobs:   
   build:
