@@ -2,6 +2,7 @@ import "jest";
 import supertest from "supertest";
 import request from "supertest";
 import { prisma } from "../../../helpers/prisma";
+import sessionStore from "../../../helpers/sessionStore";
 import app from "../../../index";
 
 describe("Users routes", () => {
@@ -9,6 +10,7 @@ describe("Users routes", () => {
   var Cookies: string;
   afterAll(async () => {
     await prisma.$disconnect();
+    await sessionStore.shutdown();
   });
   test("Debe crear un nuevo usuario", async () => {
     const res = await supertest(app).post("/apiv1/signIn").send({

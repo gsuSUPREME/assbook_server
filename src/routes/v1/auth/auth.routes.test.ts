@@ -1,11 +1,13 @@
 import supertest from "supertest";
 import app from "../../..";
 import { prisma } from "../../../helpers/prisma";
+import sessionStore from "../../../helpers/sessionStore";
 
 describe("Pruebas de autorización", () => {
   var Cookies: any;
   afterAll(async () => {
     await prisma.$disconnect();
+    await sessionStore.shutdown();
   });
   test("Debe no poder acceder a ruta protegida sin autorización", async () => {
     const result = await supertest(app).get("/apiv1/post/");

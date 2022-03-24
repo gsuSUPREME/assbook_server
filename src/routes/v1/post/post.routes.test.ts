@@ -1,5 +1,6 @@
 import supertest from "supertest";
 import { prisma } from "../../../helpers/prisma";
+import sessionStore from "../../../helpers/sessionStore";
 import app from "../../../index";
 
 describe("Post routes", () => {
@@ -19,6 +20,7 @@ describe("Post routes", () => {
     a.cookies = Cookies;
     await a.send();
     await prisma.$disconnect();
+    await sessionStore.shutdown();
   });
   test("Debe crear un nuevo post", async () => {
     const a = supertest(app).post("/apiv1/post/");
