@@ -1,93 +1,93 @@
-import supertest from "supertest";
-import { prisma } from "../../../helpers/prisma";
-import sessionStore from "../../../helpers/sessionStore";
-import app from "../../../index";
+import supertest from 'supertest';
+import {prisma} from '../../../helpers/prisma';
+import sessionStore from '../../../helpers/sessionStore';
+import app from '../../../index';
 
-describe("Post routes", () => {
+describe('Post routes', () => {
   let post: any;
   let reaction: any;
-  var Cookies: string;
-  var Cookies2: string;
+  let Cookies: string;
+  let Cookies2: string;
   beforeAll(async () => {
-    const a = await supertest.agent(app).post("/apiv1/logIn").send({
-      username: "test",
-      password: "test",
+    const a = await supertest.agent(app).post('/apiv1/logIn').send({
+      username: 'test',
+      password: 'test',
     });
-    Cookies = a.headers["set-cookie"].pop().split(";")[0];
+    Cookies = a.headers['set-cookie'].pop().split(';')[0];
   });
   afterAll(async () => {
-    const a = supertest(app).delete("/apiv1/logOut");
+    const a = supertest(app).delete('/apiv1/logOut');
     a.cookies = Cookies;
     await a.send();
-    a.cookies = Cookies2
-    await a.send()
+    a.cookies = Cookies2;
+    await a.send();
     await prisma.$disconnect();
     await sessionStore.shutdown();
   });
-  test("Debe crear un nuevo post", async () => {
-    const a = supertest(app).post("/apiv1/post/");
+  test('Debe crear un nuevo post', async () => {
+    const a = supertest(app).post('/apiv1/post/');
     a.cookies = Cookies;
     const result = await a.send({
-      title: "a",
-      content: "asdadsasd",
+      title: 'a',
+      content: 'asdadsasd',
     });
     post = result.body.post;
     expect(result.statusCode).toBe(201);
   });
 
-  test("Debe no dejar reaccionar a su propio post", async () => {
-    const a = supertest(app).post("/apiv1/post/reaction/");
+  test('Debe no dejar reaccionar a su propio post', async () => {
+    const a = supertest(app).post('/apiv1/post/reaction/');
     a.cookies = Cookies;
     const result = await a.send({
       postid: post.id,
-      reactionType: "like",
+      reactionType: 'like',
     });
     expect(result.statusCode).toBe(400);
   });
 
-  test("Debe dejar reaccionar desde otro usuario", async () => {
-    const a1 = await supertest.agent(app).post("/apiv1/logIn").send({
-      username: "test2",
-      password: "test2",
+  test('Debe dejar reaccionar desde otro usuario', async () => {
+    const a1 = await supertest.agent(app).post('/apiv1/logIn').send({
+      username: 'test2',
+      password: 'test2',
     });
-    Cookies2 = a1.headers["set-cookie"].pop().split(";")[0];
-    const a = supertest(app).post("/apiv1/post/reaction/");
+    Cookies2 = a1.headers['set-cookie'].pop().split(';')[0];
+    const a = supertest(app).post('/apiv1/post/reaction/');
     a.cookies = Cookies2;
     const result = await a.send({
       postid: post.id,
-      reactionType: "like",
+      reactionType: 'like',
     });
     reaction = result.body.reaction;
     expect(result.statusCode).toBe(201);
   });
 
-  test("Debe cargar los posts", async () => {
-    const a = supertest(app).get("/apiv1/post/");
+  test('Debe cargar los posts', async () => {
+    const a = supertest(app).get('/apiv1/post/');
     a.cookies = Cookies;
     const result = await a.send();
     expect(result.statusCode).toBe(200);
   });
-  test("Debe actualizar el post", async () => {
-    const a = supertest(app).patch("/apiv1/post/");
+  test('Debe actualizar el post', async () => {
+    const a = supertest(app).patch('/apiv1/post/');
     a.cookies = Cookies;
     const result = await a.send({
-      title: "b",
-      content: "bcbcbcbc",
+      title: 'b',
+      content: 'bcbcbcbc',
       postid: post.id,
     });
     expect(result.statusCode).toBe(200);
   });
-  test("Debe actualizar la reacción", async () => {
-    const a = supertest(app).patch("/apiv1/post/reaction/");
+  test('Debe actualizar la reacción', async () => {
+    const a = supertest(app).patch('/apiv1/post/reaction/');
     a.cookies = Cookies2;
     const result = await a.send({
       reactionid: reaction.id,
-      reactionType: "heart",
+      reactionType: 'heart',
     });
     expect(result.statusCode).toBe(200);
   });
-  test("Debe borrar el post", async () => {
-    const a = supertest(app).delete("/apiv1/post/");
+  test('Debe borrar el post', async () => {
+    const a = supertest(app).delete('/apiv1/post/');
     a.cookies = Cookies;
     const result = await a.send({
       postid: post.id,
