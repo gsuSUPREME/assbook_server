@@ -3,6 +3,9 @@ module.exports = {
   clearMocks: true,
   coverageProvider: "v8",
   preset: 'ts-jest',
+  transform: {
+    "^.+\\.(t|j)sx?$": ["@swc/jest"],
+  },
   testEnvironment: 'node',
   testPathIgnorePatterns: ["dist/", "node_modules/", "__tests__/", "__mocks__/"],
   watchPathIgnorePatterns: ["dist/", "node_modules/", "__tests__/", "__mocks__/"],
