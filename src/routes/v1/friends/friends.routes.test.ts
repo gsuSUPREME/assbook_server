@@ -17,6 +17,20 @@ describe('Rutas de amigos', () => {
     });
     Cookies = a.headers['set-cookie'].pop().split(';')[0];
     User = a.body.user;
+    if (!(await prisma.user.findUnique({
+      where: {
+        username: 'test2',
+      },
+    }))) {
+      await prisma.user.create({
+        data: {
+          name: 'test2',
+          password: 'test2',
+          username: 'test2',
+          email: 'test2@test2.com',
+        },
+      });
+    }
     const b = await supertest.agent(app).post('/apiv1/logIn').send({
       username: 'test2',
       password: 'test2',
@@ -40,15 +54,14 @@ describe('Rutas de amigos', () => {
       friendid: User2.id,
     });
     request = result.body.friend;
-    if (result.statusCode === 400) console.log(result.body);
     expect(result.statusCode).toBe(201);
   });
   test('Debe aceptar la solicitud', async () => {
-    const a = supertest.agent(app).post('/apiv1/friend/');
+    const a = supertest.agent(app).patch('/apiv1/friend/');
     a.cookies = Cookies2;
     const result = await a.send({
       reqid: request.id,
     });
-    expect(result.statusCode).toBe(201);
+    expect(result.statusCode).toBe(200);
   });
 });

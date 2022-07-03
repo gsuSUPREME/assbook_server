@@ -16,7 +16,7 @@ describe('Users routes', () => {
       name: 's',
       username: 'fg',
       password: 's',
-      email: 'asd@asd.com',
+      email: 'newUser@asd.com',
     });
     Cookies = res.headers['set-cookie'].pop().split(';')[0];
     expect(res.statusCode).toBe(201);

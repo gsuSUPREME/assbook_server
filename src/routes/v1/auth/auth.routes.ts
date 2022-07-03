@@ -52,7 +52,7 @@ router.delete('/logOut', async (req: Request, res: Response) => {
   if (!req.session) {
     return res.status(401).json({error: 'Debes iniciar sesion para acceder'});
   }
-  req.session.destroy(() => {});
+  await req.session.destroy(() => {});
   return res.status(200).json({message: 'Sesion cerrada'});
 });
 export default router;

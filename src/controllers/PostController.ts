@@ -1,4 +1,4 @@
-import {post} from '../helpers/prisma';
+import {post, user} from '../helpers/prisma';
 import {
   PostError,
   PostState,
@@ -59,11 +59,17 @@ export default class PostController {
   }): Promise<PostState> {
     if (!userid) return new PostError('userid falta estúpido');
     if (!content) return new PostError('falta \'content\' anormal');
+    if (!content.title) {
+      return new PostError('Publicación sin titulo anormal, ponle algo');
+    }
+    if (!content.content) {
+      return new PostError('Publicación vacía anormal, ponle algo');
+    }
     const newPost = await post.create({
       data: {
         title: content.title,
-        content: content.title,
-        authorId: userid,
+        content: content.content,
+        authorId: (await user.findUnique({where: {id: userid}}))!.id,
       },
     });
     return new PostSuccessfull(newPost);
@@ -120,7 +126,7 @@ export default class PostController {
       },
     });
     if (!postToUpdate) return new PostError('Este post no existe');
-    if (postToUpdate?.authorId === userid) {
+    if (postToUpdate?.authorId !== userid) {
       return new PostError('Este post no te pertenece');
     };
     if (!content.content) {

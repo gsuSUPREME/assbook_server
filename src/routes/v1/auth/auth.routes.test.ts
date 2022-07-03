@@ -5,6 +5,23 @@ import sessionStore from '../../../helpers/sessionStore';
 
 describe('Pruebas de autorización', () => {
   let Cookies: any;
+  beforeAll(async () => {
+    const user = await prisma.user.findUnique({
+      where: {
+        username: 'test',
+      },
+    });
+    if (!user) {
+      await prisma.user.create({
+        data: {
+          name: 'test',
+          password: 'test',
+          username: 'test',
+          email: 'test@test.com',
+        },
+      });
+    }
+  });
   afterAll(async () => {
     await prisma.$disconnect();
     await sessionStore.shutdown();

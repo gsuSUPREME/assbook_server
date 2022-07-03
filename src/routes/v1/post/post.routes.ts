@@ -33,11 +33,12 @@ router.get('/', async (req: Request, res: Response) => {
 });
 
 router.post('/', async (req: Request, res: Response) => {
+  const {title, content} = req.body;
   const result = await PostController.createPost({
     userid: req.session.userid!,
     content: {
-      title: req.body.title,
-      content: req.body.content,
+      title: title,
+      content: content,
     },
   });
   if (result instanceof PostError) {
@@ -54,10 +55,11 @@ router.post('/', async (req: Request, res: Response) => {
 });
 
 router.patch('/', async (req: Request, res: Response) => {
-  const result = await PostController.updatePost(req.body.postid, {
-    title: req.body.title,
-    content: req.body.content,
-  });
+  const result = await PostController.
+      updatePost(req.body.postid, req.session.userid!, {
+        title: req.body.title,
+        content: req.body.content,
+      });
   if (result instanceof PostError) {
     return res.status(400).json({error: result.error});
   }
@@ -71,7 +73,8 @@ router.patch('/', async (req: Request, res: Response) => {
   }
 });
 router.delete('/', async (req: Request, res: Response) => {
-  const result = await PostController.deletePost(req.body.postid);
+  const result = await PostController.
+      deletePost(req.body.postid, req.session.userid!);
   if (result instanceof PostError) {
     return res.status(400).json({error: result.error});
   }

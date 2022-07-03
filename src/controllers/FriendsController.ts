@@ -27,7 +27,7 @@ export default class FriendsController {
     if (userid === friendid) {
       return new FriendError('no puedes agregarte a ti mismo gafo');
     };
-    if (await user.findUnique({where: {id: friendid}})) {
+    if (!(await user.findUnique({where: {id: friendid}}))) {
       return new FriendError('el usuario no existe');
     };
     const req = await friend.create({

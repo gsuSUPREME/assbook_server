@@ -13,6 +13,20 @@ describe('Post routes', () => {
       username: 'test',
       password: 'test',
     });
+    if (!(await prisma.user.findUnique({
+      where: {
+        username: 'test2',
+      },
+    }))) {
+      await prisma.user.create({
+        data: {
+          name: 'test2',
+          password: 'test2',
+          username: 'test2',
+          email: 'test2@test2.com',
+        },
+      });
+    }
     Cookies = a.headers['set-cookie'].pop().split(';')[0];
   });
   afterAll(async () => {
