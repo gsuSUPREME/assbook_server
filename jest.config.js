@@ -2,7 +2,6 @@
 module.exports = {
   clearMocks: true,
   coverageProvider: "v8",
-  preset: 'ts-jest',
   transform: {
     "^.+\\.(t|j)sx?$": ["@swc/jest"],
   },
