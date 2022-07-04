@@ -7,7 +7,9 @@
      "paths": {
        "@routes/*": ["./src/routes/v1/*"],
        "@controllers/*": ["./src/controllers/*"],
-       "@helpers/*": ["./src/helpers/*"]
+       "@helpers/*": ["./src/helpers/*"],
+       "@grpc_servers/*": ["./src/grpc/*"],
+       "@protos/*": ["./protos/"]
     },                                      /* Specify a set of entries that re-map imports to additional lookup locations. */
     "sourceMap": true,                                /* Create source map files for emitted JavaScript files. */
     "outDir": "./dist",

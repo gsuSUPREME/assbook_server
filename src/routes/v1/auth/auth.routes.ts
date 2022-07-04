@@ -10,9 +10,11 @@ const router = expressRouter();
 
 router.post('/logIn', async (req: Request, res: Response) => {
   const {username, password} = req.body;
+  const deviceData = JSON.parse(req.body.deviceData);
   const result: UserState = await UserController.logInUser({
     username,
     password,
+    deviceData,
   });
   if (result instanceof UserError) {
     return res.status(401).json({error: result.error});

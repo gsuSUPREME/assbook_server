@@ -1,0 +1,27 @@
+syntax = "proto3";
+
+service Notifications {
+	rpc Subscribe (SubscribeRequest) returns (stream Notification);
+}
+
+message PushNotificationRequest {
+	Notification notification = 1;
+	int32 userID = 2;
+}
+
+message PushNotificationResponse {
+	bool isSended = 1;
+}
+
+message SubscribeRequest {
+	string deviceID = 1;
+	string notificationChannel = 2;
+	int32 userID = 3;
+}
+
+message Notification {
+	string type = 1;
+	int32 id = 2;
+	string message = 3;
+	int32 userID = 4;
+}

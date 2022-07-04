@@ -4,6 +4,7 @@ import {
   UserState,
   UserSuccessfull,
 } from '../helpers/models/User_Model';
+import DeviceController from './DeviceController';
 
 /**
  * Controlador para operaciones con el usuario
@@ -127,23 +128,32 @@ export default class UserController {
   /**
    * Inicia Sesión
    * @param {{
-   * string, string
-   * }} {username, password} - Usuario y contraseña de la cuenta
+   * string, string, Object
+   * }} {username, password, deviceData} - Usuario y contraseña de la cuenta
    * @return {UserState}
    */
   static async logInUser({
     username,
     password,
+    deviceData,
   }: {
     username: string;
     password: string;
+    deviceData: any;
   }): Promise<UserState> {
     if (!username) return new UserError('te falta el campo username retrasado');
     if (!password) return new UserError('te falta el campo password retrasado');
+    if (!deviceData) {
+      return new UserError('te falta el campo deviceData retrasado');
+    }
     const u = await user.findUnique({where: {username: username}});
     if (!u) return new UserError('este usuario no existe sorra');
     if (u.password !== password) {
       return new UserError('esta no es la contraseña retrasada');
+    }
+    if (!(deviceData['deviceId'])) {
+      const result = await DeviceController.addDevice(deviceData);
+      if (result instanceof UserError) return result;
     }
     return new UserSuccessfull(u);
   }

@@ -11,7 +11,8 @@
       "paths": {
         "@routes/*": ["./src/routes/v1/*"],
        "@controllers/*": ["./src/controllers/*"],
-       "@helpers/*": ["./src/helpers/*"]
+       "@helpers/*": ["./src/helpers/*"],
+       "@grpc_helpers/*": ["./src/grpc/*"]
       },
       "baseUrl": "."
     },
